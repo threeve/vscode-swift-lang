@@ -1,0 +1,55 @@
+{
+    "name": "swift-lang",
+    "displayName": "Swift",
+    "description": "Swift language support and supplemental tooling integration",
+    "version": "0.0.1",
+    "license": "MPL-2.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/threeve/vscode-swift-lang"
+    },
+    "bugs": {
+        "url": "https://github.com/threeve/vscode-swift-lang/issues"
+    },
+    "engines": {
+        "vscode": "^1.36.0"
+    },
+    "categories": [
+        "Programming Languages",
+        "Linters",
+        "Formatters",
+        "Other"
+    ],
+    "activationEvents": [
+        "onLanguage:swift",
+        "workspaceContains:Package.swift"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {},
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile",
+        "test": "node ./out/test/runTest.js"
+    },
+    "devDependencies": {
+        "@types/glob": "^7.1.1",
+        "@types/mocha": "^5.2.6",
+        "@types/node": "^10.12.21",
+        "@types/vscode": "^1.36.0",
+        "@typescript-eslint/eslint-plugin": "^1.13.0",
+        "@typescript-eslint/parser": "^1.13.0",
+        "eslint": "^6.1.0",
+        "eslint-config-prettier": "^6.0.0",
+        "eslint-plugin-prettier": "^3.1.0",
+        "glob": "^7.1.4",
+        "mocha": "^6.1.4",
+        "prettier": "^1.18.2",
+        "typescript": "^3.5.3",
+        "vscode-test": "^1.0.2"
+    },
+    "prettier": {
+        "trailingComma": "es5"
+    }
+}
