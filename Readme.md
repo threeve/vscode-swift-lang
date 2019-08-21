@@ -14,6 +14,15 @@ This extension supports document formatting via [Swift Format][swiftformat].
 The extension searches for a `swiftformat` executable installed via SwiftPM,
 CocoaPods, or in the current PATH.
 
+### SwiftLint
+
+This extension supports diagnostics via [SwiftLint][swiftlint].
+
+[swiftlint]: https://github.com/realm/SwiftLint
+
+The extension searches for a `swiftlint` executable installed via SwiftPM,
+CocoaPods, or in the current PATH.
+
 ## Requirements
 
 Certain features of swift-lang require additional tooling to be installed.

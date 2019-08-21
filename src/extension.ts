@@ -5,6 +5,7 @@
 import * as vscode from "vscode";
 
 import { SwiftDocumentFormattingEditProvider } from "./swiftFormat";
+import { SwiftLint } from "./swiftLint";
 
 export function activate(context: vscode.ExtensionContext): void {
     let outputChannel = vscode.window.createOutputChannel("Swift Lang");
@@ -15,6 +16,10 @@ export function activate(context: vscode.ExtensionContext): void {
         new SwiftDocumentFormattingEditProvider()
     );
     context.subscriptions.push(formatter);
+
+    let swiftLint = new SwiftLint();
+    swiftLint.activate(context);
+
     outputChannel.appendLine("swift-lang activated");
 }
 
