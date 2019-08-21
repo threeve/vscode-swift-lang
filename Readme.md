@@ -5,7 +5,14 @@ to VSCode.
 
 ## Features
 
-None, yet...
+### Swift Format
+
+This extension supports document formatting via [Swift Format][swiftformat].
+
+[swiftformat]: https://github.com/nicklockwood/SwiftFormat
+
+The extension searches for a `swiftformat` executable installed via SwiftPM,
+CocoaPods, or in the current PATH.
 
 ## Requirements
 

@@ -14,5 +14,11 @@ module.exports = {
     },
     rules: {
         "prettier/prettier": "warn",
+        "@typescript-eslint/explicit-function-return-type": [
+            "error",
+            {
+                allowTypedFunctionExpressions: true,
+            },
+        ],
     },
 };

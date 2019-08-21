@@ -4,9 +4,17 @@
 
 import * as vscode from "vscode";
 
+import { SwiftDocumentFormattingEditProvider } from "./swiftFormat";
+
 export function activate(context: vscode.ExtensionContext): void {
     let outputChannel = vscode.window.createOutputChannel("Swift Lang");
     context.subscriptions.push(outputChannel);
+
+    let formatter = vscode.languages.registerDocumentFormattingEditProvider(
+        { language: "swift", scheme: "file" },
+        new SwiftDocumentFormattingEditProvider()
+    );
+    context.subscriptions.push(formatter);
     outputChannel.appendLine("swift-lang activated");
 }
 
