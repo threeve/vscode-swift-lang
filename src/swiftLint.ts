@@ -18,23 +18,19 @@ interface SwiftLintDiagnostic {
 }
 
 export class SwiftLint {
-    public constructor() {
+    public constructor(context: vscode.ExtensionContext) {
         this.diagnosticCollection = vscode.languages.createDiagnosticCollection(
             "swiftlint"
         );
-    }
-
-    private diagnosticCollection: vscode.DiagnosticCollection;
-
-    public activate(context: vscode.ExtensionContext): void {
         context.subscriptions.push(
+            this.diagnosticCollection,
             vscode.workspace.onDidSaveTextDocument(
                 this.onDidSaveTextDocument.bind(this)
             )
         );
     }
 
-    public deactivate(): void {}
+    private diagnosticCollection: vscode.DiagnosticCollection;
 
     private onDidSaveTextDocument(document: vscode.TextDocument): void {
         if (document.languageId !== "swift") return;

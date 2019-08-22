@@ -17,8 +17,7 @@ export function activate(context: vscode.ExtensionContext): void {
     );
     context.subscriptions.push(formatter);
 
-    let swiftLint = new SwiftLint();
-    swiftLint.activate(context);
+    new SwiftLint(context);
 
     outputChannel.appendLine("swift-lang activated");
 }
