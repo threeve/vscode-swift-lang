@@ -23,6 +23,12 @@ This extension supports diagnostics via [SwiftLint][swiftlint].
 The extension searches for a `swiftlint` executable installed via SwiftPM,
 CocoaPods, or in the current PATH.
 
+### Tasks
+
+The extension will provide tasks if a `Package.swift` is found in the
+workspace folder. At the moment these tasks are not customizable in
+`tasks.json` in the workspace.
+
 ## Requirements
 
 Certain features of swift-lang require additional tooling to be installed.
