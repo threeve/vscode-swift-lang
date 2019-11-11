@@ -23,25 +23,38 @@ export class SwiftDocumentFormattingEditProvider
                 "Pods/SwiftFormat/CommandLineTool/swiftformat",
             ];
             let workspace = vscode.workspace.getWorkspaceFolder(document.uri);
+            if (workspace === undefined) {
+                return reject("unable to resolve workspace");
+            }
             let swiftFormatPath = which.sync("swiftformat", { nothrow: true });
-            if (workspace !== undefined) {
-                for (let relativePath of relativePaths) {
-                    let joinedPath = path.join(
-                        workspace.uri.fsPath,
-                        relativePath
-                    );
-                    if (existsSync(joinedPath)) {
-                        swiftFormatPath = path.normalize(joinedPath);
-                        break;
-                    }
+            for (let relativePath of relativePaths) {
+                let joinedPath = path.join(workspace.uri.fsPath, relativePath);
+                if (existsSync(joinedPath)) {
+                    swiftFormatPath = path.normalize(joinedPath);
+                    break;
                 }
             }
             if (swiftFormatPath === null) {
                 return reject("Unable to location `swiftformat` binary");
             }
-            let swiftFormat = childProcess.spawn(swiftFormatPath, {
-                cwd: path.dirname(document.fileName),
-            });
+            // TODO: find a .swiftformat config file
+            let config = undefined;
+            let currentPath = path.dirname(document.fileName);
+            while (currentPath.startsWith(workspace.uri.fsPath)) {
+                let testPath = path.join(currentPath, ".swiftformat");
+                if (existsSync(testPath)) {
+                    config = testPath;
+                    break;
+                }
+                currentPath = path.dirname(currentPath);
+            }
+            let swiftFormat = childProcess.spawn(
+                swiftFormatPath,
+                config === undefined ? [] : ["--config", config],
+                {
+                    cwd: path.dirname(document.fileName),
+                }
+            );
             token.onCancellationRequested(
                 () => !swiftFormat.killed && swiftFormat.kill()
             );

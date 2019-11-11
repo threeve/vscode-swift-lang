@@ -4,6 +4,7 @@
     "description": "Swift language support and supplemental tooling integration",
     "version": "0.0.1",
     "license": "MPL-2.0",
+    "publisher": "threeve",
     "repository": {
         "type": "git",
         "url": "https://github.com/threeve/vscode-swift-lang"
