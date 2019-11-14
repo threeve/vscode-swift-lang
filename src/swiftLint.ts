@@ -36,25 +36,39 @@ export class SwiftLint {
         if (document.languageId !== "swift") return;
         let swiftlint = which.sync("swiftlint", { nothrow: true });
         let workspace = vscode.workspace.getWorkspaceFolder(document.uri);
-        if (workspace !== undefined) {
-            // Look for swiftformat from swiftpm or cocoapods
-            const relativePaths = [
-                ".build/debug/swiftlint",
-                ".build/release/swiftlint",
-                "Pods/SwiftLint/swiftlint",
-            ];
-            for (let relativePath of relativePaths) {
-                let joinedPath = path.join(workspace.uri.fsPath, relativePath);
-                if (existsSync(joinedPath)) {
-                    swiftlint = path.normalize(joinedPath);
-                    break;
-                }
+        if (workspace === undefined) {
+            return;
+        }
+        // Look for swiftformat from swiftpm or cocoapods
+        const relativePaths = [
+            ".build/debug/swiftlint",
+            ".build/release/swiftlint",
+            "Pods/SwiftLint/swiftlint",
+        ];
+        for (let relativePath of relativePaths) {
+            let joinedPath = path.join(workspace.uri.fsPath, relativePath);
+            if (existsSync(joinedPath)) {
+                swiftlint = path.normalize(joinedPath);
+                break;
             }
         }
         if (swiftlint === null) return;
+        // TODO: find a .swiftformat config file
+        let config = undefined;
+        let currentPath = path.dirname(document.fileName);
+        while (currentPath.startsWith(workspace.uri.fsPath)) {
+            let testPath = path.join(currentPath, ".swiftlint.yml");
+            if (existsSync(testPath)) {
+                config = testPath;
+                break;
+            }
+            currentPath = path.dirname(currentPath);
+        }
         let child = childProcess.spawn(
             swiftlint,
-            ["lint", "--use-stdin", "--reporter", "json"],
+            ["lint", "--use-stdin", "--reporter", "json"].concat(
+                config === undefined ? [] : ["--config", config]
+            ),
             {
                 cwd: path.dirname(document.fileName),
             }
@@ -62,8 +76,8 @@ export class SwiftLint {
         let stdout = "";
         let stderr = "";
         child.stdout.setEncoding("utf8");
-        child.stdout.on("data", data => (stdout += data));
-        child.stderr.on("data", data => (stderr += data));
+        child.stdout.on("data", (data) => (stdout += data));
+        child.stderr.on("data", (data) => (stderr += data));
         child.on("error", () => {});
         child.on("close", () => {
             let results: [SwiftLintDiagnostic] = JSON.parse(stdout);
